@@ -1,6 +1,6 @@
 {
   "name": "typescript-playground",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/alfumit/typescript-playground#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "@typescript-eslint/parser": "^2.11.0",
     "lite-server": "^2.5.4"
   }
 }
