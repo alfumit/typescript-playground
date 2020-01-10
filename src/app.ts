@@ -41,7 +41,7 @@ class ProjectState extends State<Project>{
     private projects: Project[] = [];
 
     addProject(title: string, description: string, numOfPeople: number) {
-        const newProject = new Project(ProjectState.assignId().toString(), title, description, numOfPeople, ProjectStatus.Active)
+        const newProject = new Project(ProjectState.assignId().toString(), title, description, numOfPeople, ProjectStatus.Active);
 
         this.projects.push(newProject);
         for (const listenerFn of this.listeners) {
@@ -89,10 +89,33 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
         if(newElementId) {
             this.element.id = newElementId;
         }
+
+        if(hostElementId) {
+            document.getElementById(hostElementId)!.appendChild(this.element);
+        }
     }
 
     abstract configure(): void;
     abstract renderContent(): void;
+}
+
+//ProjectItem Class
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+
+    constructor(public hostElementId: string, public prj: Project) {
+        super("single-project", hostElementId, prj.id);
+        this.renderContent();
+        this.configure();
+    }
+
+    renderContent(): void {
+        // this.element.innerHTML = `${this.prj.title} | ${this.prj.description} |  ${this.prj.people}`
+        this.element.querySelector("h2")!.innerText =  this.prj.title;
+        this.element.querySelector("h3")!.innerText =  `Number of people involved: ${this.prj.people.toString()}`;
+        this.element.querySelector("p")!.innerText =  this.prj.description;
+    }
+
+    configure(): void {}
 }
 
 //ProjectList Class
@@ -100,14 +123,13 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     assignedProjects: Project[] = [];
 
     constructor(public type: 'active' | 'finished') {
-        super("project-list", "app", `${type}-projects`);
+        super("project-list", "", `${type}-projects`);
         this.configure();
         this.renderContent();
     }
 
     renderContent() {
-        const listId = `${this.type}-projects-list`;
-        this.element!.querySelector('ul')!.id = listId;
+        this.element!.querySelector('ul')!.id = `${this.type}-projects-list`;
         this.element!.querySelector('h2')!.textContent = `List of ${this.type} projects`;
     }
 
@@ -128,9 +150,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
         const listEl =  document.querySelector(`#${this.type}-projects-list`)! as HTMLUListElement;
         listEl!.innerHTML = '';
         for (const item of this.assignedProjects) {
-            const listItem = document.createElement('li')! as HTMLLIElement;
-            listItem.textContent = `${item.title} ${item.description} ${item.people}`;
-            listEl.appendChild(listItem);
+            new ProjectItem(`${this.type}-projects-list`, item);
         }
     }
 }
@@ -142,7 +162,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
     peopleInput: HTMLInputElement;
 
     constructor() {
-        super("project-input", "app", "user-input")
+        super("project-input", "", "user-input");
         this.titleInput = this.element.querySelector("#title")! as HTMLInputElement;
         this.descInput = this.element.querySelector("#description")! as HTMLInputElement;
         this.peopleInput = this.element.querySelector("#people")! as HTMLInputElement;
