@@ -2,6 +2,7 @@ import { Component } from "./base-component.js";
 import { Autobind } from "../decorators/autobind.js";
 import { Draggable } from "../models/dnd-interfaces.js";
 import { Project } from "../models/project-model.js";
+import {projectState} from "../state/project-state.js";
 
 //ProjectItem Class
 export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable {
@@ -20,6 +21,8 @@ export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> impl
     configure(): void {
         this.element.addEventListener('dragstart', this.dragStartHandler);
         this.element.addEventListener('dragend', this.dragEndHandler);
+        const closeBtn = this.element.querySelector(".close")!;
+        closeBtn.addEventListener('click', this.removeItem)
     }
 
     @Autobind
@@ -31,5 +34,10 @@ export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> impl
     @Autobind
     dragEndHandler(event: DragEvent): void {
         console.log("DragEnd");
+    }
+
+    @Autobind
+    removeItem(_: Event) {
+        projectState.removeProject(this.prj.id);
     }
 }
