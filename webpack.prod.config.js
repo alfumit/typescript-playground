@@ -4,10 +4,13 @@ const htmlPlugin = require("html-webpack-plugin");
 
 module.exports = {
     mode: "production",
-    entry: "./src/app.ts",
+    entry: {
+        ["project-manager"]: "./src/project-manager/project-manager.ts",
+        ["google-maps"]: "./src/google-maps/google-maps.ts"
+    },
     output: {
-        filename: "bundle.[contenthash].js",
-        path: path.resolve(__dirname, "dist")
+        filename: "[name]/[name].bundle.js",
+        path: path.resolve(__dirname, 'dist')
     },
     module: {
         rules: [{
@@ -15,12 +18,14 @@ module.exports = {
             use: "ts-loader",
             exclude: /node_modules/
         }]
-    }
-    ,resolve: {
+    },
+    resolve: {
         extensions: ['.js', '.ts', ".html"]
     },
     plugins: [
         new cleanPlugin.CleanWebpackPlugin(),
-        new htmlPlugin()
+        new htmlPlugin({
+            template: "index.html"
+        })
     ]
 };

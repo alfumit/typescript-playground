@@ -1,8 +1,10 @@
+require('file-loader?name=project-manager/project-manager.html!./project-manager.html');
+
 import { ProjectList} from "./components/project-list";
 import { ProjectInput } from "./components/project-input";
 
 //App Class
-class  App {
+class  ProjectManager {
     appEl: HTMLElement;
 
     constructor() {
@@ -15,7 +17,7 @@ class  App {
 }
 
 //Instantiation
-const app = new App();
+const app = new ProjectManager();
 const projectInput = new ProjectInput();
 const activeProjects = new ProjectList('active');
 const FinishedProjects = new ProjectList('finished');

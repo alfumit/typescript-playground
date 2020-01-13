@@ -2,9 +2,13 @@ const path = require("path");
 
 module.exports = {
     mode: "development",
-    entry: "./src/app.ts",
+    entry: {
+        ["project-manager"]: "./project-manager/project-manager.ts",
+        ["google-maps"]: "./google-maps/google-maps.ts"
+    },
+    context: path.resolve(__dirname, "src"),
     output: {
-        filename: "bundle.js",
+        filename: "[name]/[name].bundle.js",
         path: path.resolve(__dirname, "dist"),
         publicPath: "dist"
     },
@@ -13,10 +17,13 @@ module.exports = {
         rules: [{
             test: /\.ts$/,
             use: "ts-loader",
-            exclude: /node_modules/
+            exclude: [/node_modules/, /theory/]
         }]
     }
     , resolve: {
         extensions: ['.js', '.ts']
+    },
+    devServer: {
+
     }
 };
